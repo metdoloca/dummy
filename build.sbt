@@ -1,6 +1,11 @@
 name := "dummy"
 
+organization := "dummy"
+
+version := "1.0"
+
 scalaVersion := "2.11.6"
+
 
 resolvers += "AkkaRepository" at "http://repo.akka.io/releases/"
 

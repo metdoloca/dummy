@@ -5,11 +5,10 @@
 import io.netty.channel.{Channel, ChannelFuture, ChannelFutureListener, ChannelInitializer}
 import io.netty.util.concurrent.{Future, GenericFutureListener}
 
-import scala.util.{Try, Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 
-
-package object server {
+package object session {
   import scala.language.implicitConversions
   implicit final class Tapper[T](val obj: T) extends AnyVal {
     def <|[U](f: T => U): T = { f(obj); obj }
