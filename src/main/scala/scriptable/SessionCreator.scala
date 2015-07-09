@@ -25,15 +25,19 @@ object SessionCreator {
         .channel(classOf[NioSocketChannel])
         .option[java.lang.Boolean](ChannelOption.SO_KEEPALIVE, true)
             .handler({ ch: SocketChannel =>
-            val handler = new CommonHandler
-            handler.script = script
-            ch.pipeline().addLast(new CommonDecoder(headerDefine),new CommonEncoder(headerDefine),handler)
+//            val handler = new CommonHandler
+//            handler.script = script
+//            ch.pipeline().addLast(new CommonDecoder(headerDefine),new CommonEncoder(headerDefine),handler)
+            ch.pipeline().addLast(new CommonDecoder(headerDefine),new CommonEncoder(headerDefine) )
           })
       started=true
     }
     println("connect")
     val f=b.connect(host, port)
     if(f.awaitUninterruptibly(3,TimeUnit.SECONDS)){
+      val handler = new CommonHandler
+      handler.script = script
+      f.channel().pipeline().addLast(handler)
       return f.channel()
     }
     println( s"can't connect ${host}:${port}")

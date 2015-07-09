@@ -16,13 +16,8 @@ class Main extends Script{
 		return hd
 	}
 
-	def start() = {
+	def onStart = {
 		// do something on start script
-		println( "script start!")
-	}
-
-	override def onConnect(): Unit = {
-		println("onConnect")
 		for( count<-0 until 5){
 			println("write msg")
 			val testMsg = Message()
@@ -39,6 +34,7 @@ class Main extends Script{
 			if(recvCount == 3 || recvCount == 5){
 				println(s"onRead = ${message.readString} index = ${recvCount}")
 			}
+			writeConsole(s"abc ${recvCount}")
 		}
 	}
 }

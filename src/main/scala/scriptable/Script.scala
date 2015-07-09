@@ -1,17 +1,18 @@
 package scriptable
-import io.netty.channel._
+
+import akka.actor.ActorRef
 import codec.{HeaderDefine, Message}
+import io.netty.channel._
+
 trait Script {
+  final var actor:ActorRef=null
   final def connect(host:String,port:Int): Channel = {
     SessionCreator.connect(host, port, defineHeader, this)
   }
-  final def send:Unit ={
-
+  final def writeConsole(log:String):Unit={
+    actor ! LogLine( log, 1)
   }
-
-  def start
+  def onStart
   def defineHeader:HeaderDefine
-  def onConnect
   def onRead(message:Message)
-
 }
