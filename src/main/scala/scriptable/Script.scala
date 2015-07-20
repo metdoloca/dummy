@@ -15,4 +15,6 @@ trait Script {
   def onStart
   def defineHeader:HeaderDefine
   def onRead(message:Message)
+  def onDisconnect
+  def onException(cause: Throwable)
 }

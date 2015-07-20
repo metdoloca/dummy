@@ -11,6 +11,7 @@ import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.SocketChannel
 import io.netty.channel.socket.nio.NioSocketChannel
 import org.scalatest.{FlatSpec, Matchers}
+import scriptable.SessionCreator
 
 
 /**
@@ -69,5 +70,35 @@ class ConnectToServer extends FlatSpec with Matchers{
     }finally {
       workerGroup.shutdownGracefully();
     }
+  }
+
+  def connect(): Option[Channel] = {
+    val a:Int = 4
+    val inputStream = "aa"
+    val define = new HeaderDefine
+    define.beginDataSizeOffset = 4
+    define.headerSize = 8
+    define.typeOfDataSize = 4
+    define.beginProtocolOffset = 0
+    define.typeOfProtocolSize = 4
+    val channel:Channel = SessionCreator.connect("172.16.1.54",9999,define,null)
+    return Option(channel)
+  }
+  "sessionCreator" should "return some" in{
+//    val net = connect() match{
+//      case None => println("can't connect")
+//      case Some(x) => x
+//    }
+
+    val net = connect()
+    if( !net.isEmpty ){
+      println(net.getClass)
+    }
+    else{
+      println(net)
+    }
+
+    //tmep.
+    //temp.
   }
 }
