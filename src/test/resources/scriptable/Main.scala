@@ -35,7 +35,7 @@ class Main extends Script{
 	}
 
 	override def onRead(message:Message) = {
-		if( message.protocolId == 102 ) {
+		if(message.protocolId == 102) {
 			//println(s"onRead = ${message.readString}")
 			recvCount+=1
 			if(recvCount == 3 || recvCount == 5){
