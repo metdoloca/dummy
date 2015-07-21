@@ -17,9 +17,9 @@ class CommonDecoder(headerDefine:HeaderDefine) extends ByteToMessageDecoder{
       return
     }
     val bodySize = headerDefine.typeOfDataSize match {
-      case HeaderDefine.SIZE_INT =>   littleEndian.getInt(headerDefine.beginDataSizeOffset)
-      case HeaderDefine.SIZE_SHORT => littleEndian.getShort(headerDefine.beginDataSizeOffset)
-      case HeaderDefine.SIZE_BYTE =>  littleEndian.getByte(headerDefine.beginDataSizeOffset)
+      case HeaderDefine.SIZE_INT =>   littleEndian.getInt(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
+      case HeaderDefine.SIZE_SHORT => littleEndian.getShort(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
+      case HeaderDefine.SIZE_BYTE =>  littleEndian.getByte(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
     }
     if( bodySize + headerDefine.headerSize <= littleEndian.readableBytes() ) {
       val readSize = headerDefine.isPacketSizeIncludeHeader match {
