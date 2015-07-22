@@ -15,7 +15,7 @@ class HeaderDefine {
   // protocol
   var beginProtocolOffset=0;
   var typeOfProtocolSize=HeaderDefine.SIZE_SHORT;
-
+  var byteOrderSwapInHeader:Boolean = false
 
 
 }

@@ -46,6 +46,10 @@ class Message(val buffer:ByteBuf) {
     buffer.writeBytes(string.getBytes(Charset.forName("UTF-8")))
     buffer.writeZero(1)
   }
+
+  def writeBytes(bytes:Array[Byte]){
+    buffer.writeBytes(bytes)
+  }
 }
 
 object Message{
