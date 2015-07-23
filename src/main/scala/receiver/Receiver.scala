@@ -26,8 +26,9 @@ class Receiver extends Actor{
       File("./scriptable/"+cmd.fileName).writeAll(cmd.code)
       // run exec
       val runner = new Runner
-      runner.execute("./scriptable",self)
       remoteHost = sender
+      runner.execute("./scriptable",cmd.fileName, self)
+
     }
     case log:LogLine =>{
       remoteHost ! log

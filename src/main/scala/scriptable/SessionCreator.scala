@@ -28,7 +28,7 @@ object SessionCreator {
 //            val handler = new CommonHandler
 //            handler.script = script
 //            ch.pipeline().addLast(new CommonDecoder(headerDefine),new CommonEncoder(headerDefine),handler)
-            ch.pipeline().addLast(new CommonDecoder(headerDefine),new CommonEncoder(headerDefine) )
+            ch.pipeline()/*.addLast(new CommonDecoder(headerDefine),new CommonEncoder(headerDefine) )*/
           })
       started=true
     }
@@ -37,6 +37,9 @@ object SessionCreator {
     if(f.awaitUninterruptibly(3,TimeUnit.SECONDS)){
       val handler = new CommonHandler
       handler.script = script
+
+      f.channel().pipeline().addLast(new CommonDecoder(headerDefine))
+      f.channel().pipeline().addLast(new CommonEncoder(headerDefine))
       f.channel().pipeline().addLast(handler)
       return f.channel()
     }

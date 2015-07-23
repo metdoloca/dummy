@@ -6,6 +6,7 @@ import java.util
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageDecoder
+import org.jboss.netty.buffer.ChannelBuffers
 
 /**
  * Created by shkim on 15. 5. 11.
@@ -17,9 +18,20 @@ class CommonDecoder(headerDefine:HeaderDefine) extends ByteToMessageDecoder{
       return
     }
     val bodySize = headerDefine.typeOfDataSize match {
-      case HeaderDefine.SIZE_INT =>   littleEndian.getInt(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
-      case HeaderDefine.SIZE_SHORT => littleEndian.getShort(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
-      case HeaderDefine.SIZE_BYTE =>  littleEndian.getByte(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
+      case HeaderDefine.SIZE_INT =>
+        var size = littleEndian.getInt(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
+        if(headerDefine.byteOrderSwapInHeader){
+          size = ChannelBuffers.swapInt(size)
+        }
+        size
+      case HeaderDefine.SIZE_SHORT =>
+        var size = littleEndian.getShort(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
+        if(headerDefine.byteOrderSwapInHeader){
+          size = ChannelBuffers.swapShort(size)
+        }
+        size
+      case HeaderDefine.SIZE_BYTE =>
+        littleEndian.getByte(headerDefine.beginDataSizeOffset + littleEndian.readerIndex())
     }
     if( bodySize + headerDefine.headerSize <= littleEndian.readableBytes() ) {
       val readSize = headerDefine.isPacketSizeIncludeHeader match {

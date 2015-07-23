@@ -16,7 +16,9 @@ trait Script {
   }
 
   final def writeConsole(log:String):Unit={
-    actor ! LogLine( log, 1)
+    if( actor != null ){
+      actor ! LogLine( log, 1)
+    }
   }
   def defineHeader:HeaderDefine
 

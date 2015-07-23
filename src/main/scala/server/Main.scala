@@ -17,6 +17,7 @@ object Main extends App{
   val actor = system.actorOf(Props[Receiver], name="receiver")
   // exit wait stdin
   Console.in.readLine()
+  println("send poison pill")
   actor ! PoisonPill
   //val stopped:Future[Boolean] = gracefulStop( actor,5 seconds,Manager.Shutdown)
 }

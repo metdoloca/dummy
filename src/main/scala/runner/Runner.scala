@@ -32,12 +32,13 @@ object Pool{
 }
 
 class Runner {
-  def execute(path:String,actorRef:ActorRef) ={
+  def execute(path:String, fileName:String, actorRef:ActorRef) ={
     val scriptFile = new File(path)
     try{
+      val className = fileName.split('.')(0)
       val sse = ScalaScriptEngine.onChangeRefresh( scriptFile )
       sse.refresh
-      val scriptInstance = sse.newInstance[scriptable.Script]("scriptable.Main")
+      val scriptInstance = sse.newInstance[scriptable.Script]("scriptable." + className)
       scriptInstance.actor = actorRef
       Pool.run(scriptInstance)
     }catch {
@@ -45,7 +46,7 @@ class Runner {
         actorRef ! LogLine(e.getMessage,0)
       }
     }finally {
-
+      println("finally")
     }
   }
 }
