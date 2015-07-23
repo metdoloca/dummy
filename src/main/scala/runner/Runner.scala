@@ -46,7 +46,7 @@ class Runner {
         actorRef ! LogLine(e.getMessage,0)
       }
     }finally {
-      println("finally")
+
     }
   }
 }

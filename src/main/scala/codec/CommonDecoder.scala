@@ -36,7 +36,7 @@ class CommonDecoder(headerDefine:HeaderDefine) extends ByteToMessageDecoder{
     if( bodySize + headerDefine.headerSize <= littleEndian.readableBytes() ) {
       val readSize = headerDefine.isPacketSizeIncludeHeader match {
         case false => bodySize + headerDefine.headerSize
-        case true => bodySize
+        case true => bodySize + headerDefine.headerSize
       }
       val msg = Message(littleEndian.readBytes( readSize ))
       headerDefine.typeOfProtocolSize match {
