@@ -32,7 +32,6 @@ object SessionCreator {
           })
       started=true
     }
-    println("connect")
     val f=b.connect(host, port)
     if(f.awaitUninterruptibly(3,TimeUnit.SECONDS)){
       val handler = new CommonHandler

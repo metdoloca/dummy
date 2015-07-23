@@ -16,6 +16,7 @@ object Main extends App{
   val system = ActorSystem("RemoteSystem" , config)
   val actor = system.actorOf(Props[Receiver], name="receiver")
   // exit wait stdin
+  println("press enter : send poison pill 2 actor")
   Console.in.readLine()
   println("send poison pill")
   actor ! PoisonPill
