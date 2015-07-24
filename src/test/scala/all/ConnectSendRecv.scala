@@ -24,7 +24,6 @@ object SR1Message{
   def encrypt(source:Message):Message ={
     val cryptMsg = Message()
     cryptMsg.protocolId = source.protocolId
-    cryptMsg.writeShort(ChannelBuffers.swapShort(source.protocolId.asInstanceOf[Short]))
 
     var buf = Array[Byte]()
     source.buffer.capacity(source.buffer.writerIndex())

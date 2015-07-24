@@ -23,7 +23,7 @@ class CommonEncoder(define: HeaderDefine) extends MessageToByteEncoder[Message]{
     // write size
     buf.writerIndex(define.beginDataSizeOffset)
     if( define.isPacketSizeIncludeHeader == true ){
-      bodySize = buffer.writerIndex() - define.headerSize
+      bodySize = buffer.writerIndex() /*+ define.headerSize*/
     }
     writeNumeric(define.typeOfDataSize,bodySize,buf)
     // flush
