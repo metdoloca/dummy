@@ -20,15 +20,15 @@ class GetChunk extends FlatSpec with Matchers{
   }
 
   "Script File" should "run" in {
-    val path = getClass.getResource("/script") // /SimpleTrait.scala
-    val scriptFile = new File(path.getPath)
-
-    val sse = ScalaScriptEngine.onChangeRefresh( scriptFile )
-    sse.refresh
-
-    val t = sse.newInstance[script.SimpleTrait]("script.Main")
-    t.start
-    t.start
+//    val path = getClass.getResource("/script") // /SimpleTrait.scala
+//    val scriptFile = new File(path.getPath)
+//
+//    val sse = ScalaScriptEngine.onChangeRefresh( scriptFile )
+//    sse.refresh
+//
+//    val t = sse.newInstance[script.SimpleTrait]("script.Main")
+//    t.start
+//    t.start
     //println(t.result)
     //println(t.connect("a",4))
   }

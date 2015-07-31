@@ -1,7 +1,7 @@
 package receiver
 
 import akka.actor.{ActorRef, Actor}
-import runner.Runner
+import runner.{Pool, Runner}
 import scriptable.{LogLine, Command}
 
 import scala.reflect.io.{File, Path}
@@ -19,17 +19,24 @@ class Receiver extends Actor{
       println("remote received " + msg + " from " + sender)
     }
     case cmd:Command =>{
-      // create file
-      println( s"fileName = ${cmd.fileName}" )
-      val path: Path = Path ("./scriptable")
-      path.createDirectory(failIfExists=false)
-      File("./scriptable/"+cmd.fileName).writeAll(cmd.code)
-      // run exec
-      val runner = new Runner
-      remoteHost = sender
-      runner.execute("./scriptable",cmd.fileName, self)
-
+      cmd.op match {
+        case "execute"=>{
+          val path: Path = Path ("./scriptable")
+          path.createDirectory(failIfExists=false)
+          File("./scriptable/"+cmd.fileName).writeAll(cmd.code)
+          // run exec
+          val runner = new Runner
+          remoteHost = sender
+          runner.execute("./scriptable",cmd.fileName, self, cmd.hostIp, cmd.sessionKey)
+        }
+        case "kill" => {
+          //println("kill")
+          Pool.kill(cmd.hostIp, cmd.sessionKey)
+        }
+        case _ => {}
+      }
     }
+
     case log:LogLine =>{
       remoteHost ! log
     }

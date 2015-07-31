@@ -83,12 +83,12 @@ class SR1 extends Script{
 //    }
   }
 
-  override def onRead(message:Message) = {
+  override def onRead(channel:Channel, message:Message) = {
     val protocol = message.readShort
     println(ChannelBuffers.swapShort(protocol))
   }
 
-  override def onDisconnect = {
+  override def onDisconnect(channel:Channel) = {
     writeConsole("onDisconnect")
   }
 
@@ -109,39 +109,39 @@ class SR1 extends Script{
 
 class ConnectSendRecv extends FlatSpec with Matchers{
 
-  "script" should "connect" in {
-    val path = getClass.getResource("/scriptable")
-    val scriptFile = new File(path.getPath)
-    val sse = ScalaScriptEngine.onChangeRefresh( scriptFile )
-    sse.refresh
-    val t = sse.newInstance[scriptable.Script]("scriptable.Main")
-    Thread.sleep(50000)
-  }
-
-  "list test" should "aa" in {
-    val seq:mutable.MutableList[String] = new mutable.MutableList[String]
-    seq+="a"
-    seq+="b"
-    seq foreach { x => println ( x )}
-  }
-
-  "sr" should "auth" in {
-    val sr1 = new SR1
-    val channel = sr1.connect( "172.16.1.244", 30200)
-    if( channel != null ){
-      val userId = "dmg2@m.m"
-      val dummyMsg = SR1Message(102)
-      dummyMsg.writeString(userId,40+1)
-      dummyMsg.writeString("1",32+1)
-      dummyMsg.writeInt(606051751)
-      dummyMsg.writeShort(1)
-      dummyMsg.writeShort(1)
-      dummyMsg.writeString("",6)
-      dummyMsg.writeByte(0)
-      dummyMsg.writeByte(2)
-      val encryptMsg = SR1Message.encrypt(dummyMsg)
-      channel.writeAndFlush(encryptMsg)
-    }
-    Thread.sleep(5000000)
-  }
+//  "script" should "connect" in {
+//    val path = getClass.getResource("/scriptable")
+//    val scriptFile = new File(path.getPath)
+//    val sse = ScalaScriptEngine.onChangeRefresh( scriptFile )
+//    sse.refresh
+//    val t = sse.newInstance[scriptable.Script]("scriptable.Main")
+//    Thread.sleep(50000)
+//  }
+//
+//  "list test" should "aa" in {
+//    val seq:mutable.MutableList[String] = new mutable.MutableList[String]
+//    seq+="a"
+//    seq+="b"
+//    seq foreach { x => println ( x )}
+//  }
+//
+//  "sr" should "auth" in {
+//    val sr1 = new SR1
+//    val channel = sr1.connect( "172.16.1.244", 30200)
+//    if( channel != null ){
+//      val userId = "dmg2@m.m"
+//      val dummyMsg = SR1Message(102)
+//      dummyMsg.writeString(userId,40+1)
+//      dummyMsg.writeString("1",32+1)
+//      dummyMsg.writeInt(606051751)
+//      dummyMsg.writeShort(1)
+//      dummyMsg.writeShort(1)
+//      dummyMsg.writeString("",6)
+//      dummyMsg.writeByte(0)
+//      dummyMsg.writeByte(2)
+//      val encryptMsg = SR1Message.encrypt(dummyMsg)
+//      channel.writeAndFlush(encryptMsg)
+//    }
+//    Thread.sleep(5000000)
+//  }
 }

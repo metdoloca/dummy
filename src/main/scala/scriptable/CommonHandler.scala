@@ -8,18 +8,19 @@ class CommonHandler() extends ChannelInboundHandlerAdapter {
   var script:Script=null
   override def channelRead(ctx: ChannelHandlerContext, msg: AnyRef):Unit={
 
-    script.onRead(msg.asInstanceOf[Message])
+    script.onRead(ctx.channel(), msg.asInstanceOf[Message])
   }
   @throws(classOf[Exception])
   override def channelActive(ctx: ChannelHandlerContext):Unit={
     //println( "channelActive" + ctx.channel().toString )
     //ctx.fireChannelActive()
+    //script.onConnected(ctx.channel())
   }
 
   @throws(classOf[Exception])
   override def channelInactive(ctx: ChannelHandlerContext):Unit={
     //println( "channelInactive" + ctx.channel().toString )
-    script.onDisconnect
+    script.onDisconnect(ctx.channel())
   }
 
   @throws(classOf[Exception])

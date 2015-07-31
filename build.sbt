@@ -15,4 +15,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-remote" % "2.3.11",
   "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test",
   "com.googlecode.scalascriptengine" %% "scalascriptengine" % "1.3.10",
-  "org.scala-lang" % "scala-compiler" % "2.11.6")
+  "org.scala-lang" % "scala-compiler" % "2.11.6",
+  "org.slf4j" % "slf4j-simple" % "1.6.4"
+)

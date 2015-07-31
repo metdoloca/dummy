@@ -12,7 +12,7 @@ class Message(val buffer:ByteBuf) {
     buffer.readInt()
   }
 
-  def readUINT:Long = {
+  def readUInt:Long = {
     buffer.readUnsignedInt()
   }
 
@@ -32,6 +32,10 @@ class Message(val buffer:ByteBuf) {
 
   def readSwapShort():Short ={
     ChannelBuffers.swapShort(readShort)
+  }
+
+  def readByte:Byte = {
+    buffer.readByte()
   }
   // read null terminate string
   def readString( zeroPadding:Int=0) :String = {
@@ -66,6 +70,10 @@ class Message(val buffer:ByteBuf) {
     buffer.writeLong(long)
   }
 
+  def writeSwapLong(long:Long) = {
+    buffer.writeLong(ChannelBuffers.swapLong(long))
+  }
+
   def writeInt(int:Int) = {
     buffer.writeInt(int)
   }
@@ -87,8 +95,10 @@ class Message(val buffer:ByteBuf) {
     val bytes = string.getBytes(Charset.forName("UTF-8"))
     val bytesLength = bytes.length
     buffer.writeBytes(bytes)
-    buffer.writeZero(1)
-    buffer.writeZero( fixedSize - (bytesLength + 1) )
+    if( bytes.length < fixedSize){
+      buffer.writeZero(1)
+      buffer.writeZero( fixedSize - (bytesLength + 1) )
+    }
   }
 
   def writeBytes(bytes:Array[Byte]){

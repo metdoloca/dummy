@@ -13,14 +13,13 @@ object SessionCreator {
   lazy val b = init()
   var started = false
   def init(): Bootstrap ={
-    println("start")
     new Bootstrap()
   }
 
   def connect(host:String, port:Int, headerDefine:HeaderDefine, script:Script ):Channel = {
 
     if( !started ){
-      val workerGroup:EventLoopGroup = new NioEventLoopGroup();
+      val workerGroup:EventLoopGroup = new NioEventLoopGroup(10);
       b.group(workerGroup)
         .channel(classOf[NioSocketChannel])
         .option[java.lang.Boolean](ChannelOption.SO_KEEPALIVE, true)
@@ -32,17 +31,19 @@ object SessionCreator {
           })
       started=true
     }
-    val f=b.connect(host, port)
-    if(f.awaitUninterruptibly(3,TimeUnit.SECONDS)){
-      val handler = new CommonHandler
-      handler.script = script
+    this.synchronized{
+      val f=b.connect(host, port)
+      if(f.awaitUninterruptibly(3,TimeUnit.SECONDS)){
+        val handler = new CommonHandler
+        handler.script = script
 
-      f.channel().pipeline().addLast(new CommonDecoder(headerDefine))
-      f.channel().pipeline().addLast(new CommonEncoder(headerDefine))
-      f.channel().pipeline().addLast(handler)
-      return f.channel()
+        f.channel().pipeline().addLast(new CommonDecoder(headerDefine))
+        f.channel().pipeline().addLast(new CommonEncoder(headerDefine))
+        f.channel().pipeline().addLast(handler)
+        return f.channel()
+      }
+      println( s"can't connect ${host}:${port}")
     }
-    println( s"can't connect ${host}:${port}")
     return null
   }
 }
