@@ -22,7 +22,7 @@ class CommonEncoder(define: HeaderDefine) extends MessageToByteEncoder[Message]{
     writeNumeric(define.typeOfProtocolSize, msg.protocolId, buf)
     // write size
     buf.writerIndex(define.beginDataSizeOffset)
-    if( define.isPacketSizeIncludeHeader == true ){
+    if(define.isPacketSizeIncludeHeader){
       bodySize = buffer.writerIndex() /*+ define.headerSize*/
     }
     writeNumeric(define.typeOfDataSize,bodySize,buf)
@@ -34,27 +34,22 @@ class CommonEncoder(define: HeaderDefine) extends MessageToByteEncoder[Message]{
 
   def writeNumeric(size:Int,number:Int,buf:ByteBuf) = {
     size match {
-      case HeaderDefine.SIZE_INT => {
+      case HeaderDefine.SIZE_INT =>
         if (define.byteOrderSwapInHeader) {
           buf.writeInt(ChannelBuffers.swapInt(number))
         }
         else {
           buf.writeInt(number)
         }
-      }
-
-      case HeaderDefine.SIZE_SHORT => {
+      case HeaderDefine.SIZE_SHORT =>
         if (define.byteOrderSwapInHeader) {
           buf.writeShort(ChannelBuffers.swapShort(number.toShort))
         }
         else{
           buf.writeShort(number.toShort)
         }
-      }
-
-      case HeaderDefine.SIZE_BYTE => {
+      case HeaderDefine.SIZE_BYTE =>
         buf.writeByte(number.toShort)
-      }
     }
   }
 }

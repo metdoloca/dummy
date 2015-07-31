@@ -18,16 +18,8 @@ trait Script {
   final def connect(host:String,port:Int): Channel = {
     val channel = SessionCreator.connect(host, port, defineHeader, this)
     sessions+=channel
-
-    //onConnected(channel)
     channel
-//    val aa:AttributeKey[Int] = new AttributeKey[Int]("f")
-//    channel.attr[Int](aa)
-//    channel.remoteAddress().asInstanceOf[InetSocketAddress].getPort()
   }
-//  final def connect(): Channel = {
-//    SessionCreator.connect(getHost, getPort, defineHeader, this)
-//  }
 
   final def writeConsole(log:String):Unit={
     if( actor != null ){
