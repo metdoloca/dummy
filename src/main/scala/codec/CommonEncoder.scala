@@ -6,7 +6,7 @@ package codec
 
 import java.nio.ByteOrder
 
-import io.netty.buffer.{Unpooled, ByteBuf}
+import io.netty.buffer.{ByteBufAllocator, Unpooled, ByteBuf}
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToByteEncoder
 import org.jboss.netty.buffer.ChannelBuffers
@@ -15,7 +15,9 @@ class CommonEncoder(define: HeaderDefine) extends MessageToByteEncoder[Message]{
   override def encode(ctx: ChannelHandlerContext, msg: Message, out: ByteBuf): Unit = {
     val buffer = msg.buffer
     var bodySize = buffer.writerIndex()
-    val buf = Unpooled.buffer(bodySize+define.headerSize).order(ByteOrder.LITTLE_ENDIAN)
+
+    val alloc:ByteBufAllocator = ctx.channel().alloc()
+    val buf = alloc.buffer(bodySize+define.headerSize).order(ByteOrder.LITTLE_ENDIAN)
 
     // write protocol
     buf.writerIndex(define.beginProtocolOffset)
